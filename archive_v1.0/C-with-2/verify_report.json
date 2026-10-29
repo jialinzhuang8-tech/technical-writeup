@@ -1,0 +1,26 @@
+{
+  "summary": {
+    "total": 2,
+    "pass": 2,
+    "fail": 0,
+    "by_label": {
+      "fact": 0,
+      "inference": 0,
+      "unknown": 2
+    }
+  },
+  "results": [
+    {
+      "id": "U1",
+      "label": "unknown",
+      "status": "PASS",
+      "problems": []
+    },
+    {
+      "id": "U2",
+      "label": "unknown",
+      "status": "PASS",
+      "problems": []
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "pdf": "input/alvarez_ferman_2302.03131v1.pdf",
+  "n_pages": 16,
+  "pages_without_text": [],
+  "pages_figure_like": [],
+  "pages_garbled": [],
+  "text_layer_ok": true,
+  "notes": [
+    "pages_figure_like 的图内容不在文本里: 图上的数值/形状只能目视读取, 且必须标注为'目视近似, 未经文本核验'。",
+    "公式区域常被拆成逐字符行, 无法逐字引用: 公式只给页码+邻近散文锚点, 不要手抄公式当原文引文。",
+    "页码以 PDF 页序为准; 若与论文打印页码不同, 在报告中同时注明。"
+  ]
+}

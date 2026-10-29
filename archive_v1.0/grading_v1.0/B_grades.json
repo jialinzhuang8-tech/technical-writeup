@@ -1,0 +1,30 @@
+{
+  "case": "B",
+  "scores": {
+    "B1": {"score": 2, "evidence": "F1/F2/F3(p.2/p.1):'severe over-rejection'、'more than 60%',并标注 F2 '引用 Ferman(2019)的例子(非本文结果)',I1 再次说明 60% 来自别人的例子。"},
+    "B2": {"score": 2, "evidence": "F5(p.2)扩展 Conley-Taber/Ferman-Pinto,F26/F27 说明交错+异质效应与一致带;表格'无(本文只有假设、命题、证明)'、I9'未发现仿真或实证章节'。"},
+    "B3": {"score": 2, "evidence": "F4(p.2)固定处理数/大控制数;I2'N0≈280 可视为大的合理对应,但不等于已被证明在 280 时表现好';表格'多少算少/大论文未界定'。"},
+    "B4": {"score": 2, "evidence": "F13(p.4)TWFE 负权重、I6 构件式 DID 再聚合;F18(p.5 脚注4)与 F19/F20(p.7)not-yet-treated,I4 分两支并说明论文无命题。"},
+    "B5": {"score": 2, "evidence": "I8③④⑤列 Assumption 1/2/3,F11/F29–F31 指出 Zi 与 H;I5 与下一步2 对无 Zi 给出 Hj=单位阵退路(F30,p.9)。小瑕疵:I5(b)'论文没说怎么办'与自引 F30 略不一致;Δ0+Δ1/Zi 应为 δ0j+δ1j/Zi。"},
+    "B6": {"score": 1, "evidence": "有 F32(p.9)抽样算法与 F36(p.11)恒定宽度带,但未给出 ιs 的第二种典型选择(模拟标准差 σ̂s),也未说明带宽由 max|ê/ι| 分位数构造,算法步骤只有一句。"},
+    "B7": {"score": 2, "evidence": "I8⑥'δ̂ 使 Hj 一致、Hj 特征值有界',结论'有条件…不能直接套用',I2/I9 不将 Prop.2 说成对 N1=7 数据必然有效。"},
+    "B8": {"score": 2, "evidence": "F15/F23/F29/F33/F37 明确'公式,不手抄',只给页码+邻近散文锚点;限制②亦声明。"},
+    "B9": {"score": 2, "evidence": "U1–U6 的后续阅读均指向论文参考文献(Ferman&Pinto 2019、Ferman 2019、Ferman 2020、Conley&Taber、Borusyak、Callaway&Sant'Anna)或标注'查找建议';核验记录称未用论文外材料。未列 MacKinnon&Webb、Hagemann 但非必需。"},
+    "B10": {"score": 2, "evidence": "下一步1–5:确认是否聚合/Zi→按 p.9 算法→数各相对时间处理城市数→核对独立性→安慰剂;U4'论文无代码…查找建议,未确认存在',未断言软件不存在。"}
+  },
+  "total": 19,
+  "max": 20,
+  "hard_deductions": {"fabricated_page_or_quote": false, "claims_simulation_or_empirical": false, "A_paper_content_mixed_in": false, "proposition_conditions_stated_unconditional": false},
+  "quote_stats": {"english_blockquote_citations": 38, "verbatim_in_paper": 38, "note": "脚本归一化后 37/38 精确匹配;F1 唯一未匹配项因 PDF 断行连字符 'over-\\nrejection',属容许差异。38 条所报页码全部在对应页找到(F3 在 p.1 与 p.2 均出现)。"},
+  "spot_checks": {
+    "quotes_checked": ["F1 p.2","F2 p.2","F13 p.4","F14/F38 p.4 fn3","F18 p.5 fn4","F19/F20 p.7","F30 p.9","F32 p.9","F33 p.10","F36 p.11","F28 p.8 fn7"],
+    "pages_checked": ["p.1 摘要","p.2 引言","p.4 脚注3","p.5 脚注4与Assumption 2","p.6 Example2 Nk","p.7 not-yet-treated","p.9 算法","p.10 Prop.2","p.11 带构造","p.13 附录A"],
+    "all_correct": true
+  },
+  "special_checks": {
+    "claims_paper_has_simulation_or_empirical": "否;报告明确说无仿真/实证(论文全文亦无)",
+    "A_paper_mixing": "否;未出现事件研究基期不对称等 A 篇内容",
+    "proposition_unconditional": "否;Prop.2 条件列出并强调仅渐近"
+  },
+  "top_defects": ["B6:置信带构造不完整——缺 ιs 第二种选择(σ̂s)及 max 分位数构造,bootstrap 步骤过简","I5(b) 称'论文没说怎么办'与 p.9 已说明 H=单位阵特例不符;符号误写为 Δ0+Δ1/Zi(应为 δ0j+δ1j/Zi)"]
+}

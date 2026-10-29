@@ -1,10 +1,10 @@
 {
   "summary": {
-    "total": 39,
-    "pass": 39,
+    "total": 35,
+    "pass": 35,
     "fail": 0,
     "by_label": {
-      "fact": 27,
+      "fact": 23,
       "inference": 6,
       "unknown": 6
     }
@@ -29,49 +29,49 @@
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 3
+      "verified_on_page": 7
     },
     {
       "id": "F4",
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 5
+      "verified_on_page": 8
     },
     {
       "id": "F5",
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 5
+      "verified_on_page": 8
     },
     {
       "id": "F6",
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 7
+      "verified_on_page": 5
     },
     {
       "id": "F7",
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 7
+      "verified_on_page": 3
     },
     {
       "id": "F8",
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 8
+      "verified_on_page": 3
     },
     {
       "id": "F9",
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 8
+      "verified_on_page": 9
     },
     {
       "id": "F10",
@@ -92,7 +92,7 @@
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 9
+      "verified_on_page": 10
     },
     {
       "id": "F13",
@@ -113,14 +113,14 @@
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 10
+      "verified_on_page": 12
     },
     {
       "id": "F16",
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 10
+      "verified_on_page": 12
     },
     {
       "id": "F17",
@@ -155,7 +155,7 @@
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 12
+      "verified_on_page": 11
     },
     {
       "id": "F22",
@@ -169,35 +169,7 @@
       "label": "fact",
       "status": "PASS",
       "problems": [],
-      "verified_on_page": 12
-    },
-    {
-      "id": "F24",
-      "label": "fact",
-      "status": "PASS",
-      "problems": [],
-      "verified_on_page": 13
-    },
-    {
-      "id": "F25",
-      "label": "fact",
-      "status": "PASS",
-      "problems": [],
-      "verified_on_page": 12
-    },
-    {
-      "id": "F26",
-      "label": "fact",
-      "status": "PASS",
-      "problems": [],
-      "verified_on_page": 3
-    },
-    {
-      "id": "F27",
-      "label": "fact",
-      "status": "PASS",
-      "problems": [],
-      "verified_on_page": 3
+      "verified_on_page": 8
     },
     {
       "id": "I1",

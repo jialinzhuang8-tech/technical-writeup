@@ -1,240 +1,273 @@
-# 阅读报告:默认 did 事件研究图处理前系数≈0,能否写"平行趋势得到验证"?
+# 阅读报告:Roth (2024/2026) 对“CS 默认事件研究图处理前系数≈0 能否证明平行趋势”的回答
 
-论文:Roth, J., *Interpreting Event-Studies from Recent Difference-in-Differences Methods*, arXiv:2401.12309v2(版本日期 2026-01-21)。页码均为 PDF 页序(与打印页码一致,共15页)。
+论文:Roth, *Interpreting Event-Studies from Recent Difference-in-Differences Methods*, arXiv:2401.12309v2(PDF 共 15 页;页码均为 PDF 页序,与论文打印页码一致)。
 
 ## 1. 一句话结论
 
-**不能。**(有条件强度)论文显示,默认设置的 CS 事件研究图处理前系数是相邻期短差分、处理后是长差分,二者构造不对称,处理前"平坦"不能当作平行趋势成立的证据(F5、F7、I1);建议改用 `base_period="universal"` 重画,并补充分队列均值图与构成检验(F10、F15、F17)。论文只在非交错、单次仿真下证明这点,用户的交错设定属推断(I3)。
+**不能(有条件、较确定)。** 论文的核心点是:R `did` 默认的事件研究图,处理前系数(相邻期短差分)与处理后系数(相对基期长差分)构造不对称,不能按 TWFE 的目视经验解读,所以“处理前≈0”不足以写成“平行趋势得到验证、DID 设定有效”;论文建议改用 `base_period="universal"` 重画,并配合按队列的均值图、平衡样本和敏感性分析(推断 I1、事实 F6/F19/F26)。注意论文只在非交错、单次仿真中论证,交错设定需用户自行重跑(U1/U4)。
 
 ## 2. 适用性对照表
 
 | 设定项 | 论文设定 | 我的设定 | 判断 | 依据 |
-| --- | --- | --- | --- | --- |
-| 处理时点 | 仿真与推导均为非交错(common timing),处理从 t=1 开始 | 3 批交错进入(2017/2020/2022) | 部分一致(机制可迁移,数值性质未证) | F1, F2, F5, F12, I3, U1 |
-| 对照组 | 从不处理组(仿真);CS 描述为处理组与 not-yet-treated 比较 | 从未处理组数千家 | 部分一致 | F23, U5 |
-| 估计量/软件 | CS,R `did` 默认设置 | CS,R `did` 默认设置 | 一致(版本需核对) | F4, F5, F25, U5 |
-| 默认图构造 | 处理前短差分、处理后长差分 | 用户未改 base period,即默认 | 一致 | F5, F6 |
-| 趋势违反形态 | 线性趋势违反,无处理效应(单次仿真,100 单位) | 未知;真实数据的违反形式未知 | 论文未覆盖 | F1, F2, F3, I2 |
-| 图形症状 | 处理前相对平坦,处理时点出现拐折,此后上升 | 处理前4期≈0,t+4、t+5 显著 | 定性相容,不能互证 | F4, F26, I2 |
-| 样本规模 | 100 单位,一半处理 | 约280处理 + 数千对照 | 论文未覆盖(功效问题) | F2, U4 |
-| 队列构成 | 单一队列 | 三批队列,构成未汇报 | 部分一致(论文提示构成会随相对时间变化) | F16, F17, I4, U3 |
-| 敏感性分析 | 提及 Rambachan-Roth;对默认不对称图可能误导 | 未做 HonestDiD | 论文未覆盖 CS 交错的具体做法 | F9, F22, F24, I5, U2 |
+|---|---|---|---|---|
+| 处理时点 | 共同(非交错)时点:所有处理单位 t=1 起处理(第 3 页、第 6–7 页) | 三批进入(2017/2020/2022) | 部分一致:论文明说结论在非交错设定下推出,交错情形仅有一般提示(构成变化) | F7,F12,F29,U1,I3 |
+| 对照组 | 从未处理组(仿真中) | 从未处理组 | 一致(但论文未讨论 control_group 选项) | F8,U3 |
+| 估计量/软件 | CS,R `did` 默认设置 | CS,R `did` 默认(版本未知) | 一致(版本/选项未知) | F10,F32,U3 |
+| 证据类型与规模 | 一次仿真抽样 + 代数推导,100 个单位 | 约 280 处理 + 数千对照,真实数据 | 部分一致:仿真是例证,代数部分(共同时点)是一般性的,但不是在用户设定下验证 | F7,F13,F15 |
+| 违反形态 | 线性趋势违反、无处理效应 | 违反形态未知 | 论文未覆盖(仅例子) | F8,I2 |
+| 处理前系数构造 | 默认:相邻期短差分 | 默认选项,未调 base period | 一致 | F12,F13,F19 |
+| 事件研究图用途 | 可作为研究设计有效性证据,但默认图不应按 TWFE 方式解读 | 想据此宣称“验证”平行趋势 | 不一致(论文提示不能这样解读) | F4,F6,F16,F17,I1 |
+| 队列构成与构成变化 | 指出交错设定下构成随相对时期变化 | 未汇报队列构成 | 论文提示相关(论文给了建议,未对本样本计算) | F29,F30,F31,I4 |
+| 敏感性分析 | Rambachan–Roth 类分析在默认不对称图上可能误导 | 未做 HonestDiD | 部分一致:论文给出方向,无 CS 交错步骤 | F18,F27,I5 |
 
 ## 3. 原文事实(F*)
 
-**F1**(PDF p.3)
-> However, parallel trends is violated: the treated group's outcome increases linearly relative to the control group's outcome in all periods
+**F1**(第 1 页)
 
-含义:论文的核心仿真设定(单次仿真抽样、非交错处理时点):处理组结果相对对照组线性上升,即平行趋势被违反。
+> …the default plots produced by software for several of the most popular recent methods do not match those of traditional two-way fixed effects…
 
-**F2**(PDF p.3)
-> Figure 1 shows event-studies for a single simulation draw from this DGP when there are 100 total units and half of them are treated.
+含义:摘要:若干主流新方法(含 CS)的软件默认事件研究图与传统 TWFE 事件研究图不一致(论文以非交错处理时点的简单设定论证)。
 
-含义:图1对应的仿真规模:单次仿真抽样,100个单位、一半为处理组;处理时点非交错。
+**F2**(第 1 页)
 
-**F3**(PDF p.2)
-> there is no effect of the treatment but parallel trends is violated
+> …may show a kink or jump at the time of treatment even when the TWFE event-study shows a straight line…
 
-含义:在该仿真中处理无效应但平行趋势被违反。
+含义:摘要:新方法的图可能在处理时点出现拐点/跳变,即使 TWFE 事件研究是一条直线。
 
-**F4**(PDF p.5)
-> then exhibits a kink at the time of the treatment, sloping upwards afterwards.
+**F3**(第 1 页)
 
-含义:在上述仿真中,使用 R did 包默认设置的 CS 事件研究图(图1b):处理前系数相对平坦,处理时点出现拐折(kink),此后向上倾斜。
+> …visual heuristics for evaluating violations of parallel trends using TWFE event-study plots…
 
-**F5**(PDF p.7)
-> the pre-treatment coefficients are "short-differences", i.e. comparisons of consecutive periods, whereas the post-treatment coefficients are "long-differences", i.e. comparisons relative to the period before treatment.
+含义:摘要:原因是新方法对处理前系数与处理后系数的构造不对称;因此评估平行趋势违反的 TWFE 目视经验不应直接套用。
 
-含义:CS 默认构造在处理前与处理后是不对称的:处理前系数是相邻期的短差分(short-differences),处理后系数是相对处理前一期的长差分(long-differences)。(论文第3.2节,非交错时点设定下的推导)
+**F4**(第 2 页)
 
-**F6**(PDF p.8)
-> [公式] 锚点句: so the population version of the CS event-study coefficients show a kink at zero
+> …provide evidence about the validity of the research design…
 
-含义:在论文仿真 DGP 下 CS 总体事件研究系数的公式:r<0 时为常数 gamma,r>=0 时为 gamma*(r+1),故若 gamma 不为 0 则在 0 处出现拐折。(公式不手抄,见同页 anchor)
+含义:论文所说的事件研究图第二个用途:为研究设计的有效性提供证据,让读者做“目视推断”。
 
-**F7**(PDF p.9)
-> a kink or jump in the plot may arise even if there is no treatment effect and parallel trends is equally violated in all periods
+**F5**(第 2 页)
 
-含义:论文的实践结论:由于处理前/后系数构造不对称,即使无处理效应且平行趋势在所有期被同等程度违反,图上也可能出现拐折或跳变。(针对 CS、BJS 等默认事件研究图)
+> …with the coefficient for the period directly before treatment typically normalized to zero…
 
-**F8**(PDF p.9)
-> One should therefore not apply the typical heuristics for visual inference
+含义:传统 TWFE 事件研究中,处理前一期的系数通常被标准化为零。
 
-含义:论文主张不应对这些方法的默认图套用 TWFE 事件研究的常见目视判断(如找处理时点的断点/拐折)。
+**F6**(第 2 页)
 
-**F9**(PDF p.9)
-> Sensitivity analyses that compare the pre-treatment and post-treatment coefficients from these event-studies (e.g. Manski and Pepper, 2018; Rambachan and Roth, 2023) may likewise yield misleading conclusions
+> …should not be interpreted in the same way as traditional dynamic TWFE…
 
-含义:论文指出:比较这类事件研究图处理前与处理后系数的敏感性分析(如 Rambachan and Roth, 2023)在处理前/后系数构造不对称时,可能得出误导性结论。
+含义:论文的核心论点:为评估平行趋势违反的目的,若干主流新方法的软件默认事件研究图不应按传统动态 TWFE 的方式解读。
 
-**F10**(PDF p.10)
-> always use the period before treatment as the baseline
+**F7**(第 3 页)
 
-含义:论文对 CS 的修正建议:处理前系数也使用长差分,即始终以处理前一期为基准。
+> …Figure 1 shows event-studies for a single simulation draw from this DGP when there are 100 total units and half of them are treated…
 
-**F11**(PDF p.10)
-> This can be implemented, for example, in the did R and csdid Stata packages using the options base_period
+含义:仿真设定:单次仿真抽样,100 个单位、一半被处理(Figure 1 的证据规模)。
 
-含义:该修正在 did(R) 中通过 base_period 选项(论文写作 base_period = "universal")实现;在 csdid(Stata) 中用 long2。
+**F8**(第 2 页)
 
-**F12**(PDF p.10)
-> Using these settings, the event-study estimates are numerically equivalent to the dynamic TWFE specification in the non-staggered setting considered here.
+> …there is no effect of the treatment but parallel trends is violated…
 
-含义:论文称:使用这些设置后,CS 事件研究估计在论文所考虑的非交错时点设定下与动态 TWFE 数值等价(论文未对交错设定做此断言)。
+含义:仿真 DGP 中处理无效应但平行趋势被违反(处理组相对对照组线性上升)。
 
-**F13**(PDF p.10)
-> he concludes that long-run violations of parallel trends are easier to visualize using the universal-base option
+**F9**(第 3 页)
 
-含义:脚注9转述 Callaway(2021) 博客:用 universal 基期更易可视化长期平行趋势违反;用短差分可能更易发现无预期假设的违反。
+> …shows a clear kink at the treatment date…
 
-**F14**(PDF p.12)
-> the discussion here does not threaten the validity of the post-treatment event-study estimates for recent methods if the appropriate parallel trends assumption holds
+含义:在该仿真(非交错设定)中,R 包 CS 的事件研究图在处理时点出现明显拐点。
 
-含义:论文强调上述讨论不威胁处理后事件研究估计的有效性——前提是相应的平行趋势假设成立。
+**F10**(第 5 页)
 
-**F15**(PDF p.12)
-> report an event-study for a method that treats the periods completely symmetrically (e.g. using the did package with the options described above) to visually evaluate the plausibility of the parallel trends assumption
+> …using the default settings in the did package in R…
 
-含义:论文建议:用对处理前后期完全对称处理的方法(如按上述选项设置的 did 包)报告事件研究,以目视评估平行趋势的"合理性(plausibility)"。
+含义:Figure 1(b) 的 CS 结果使用 R did 包的默认设置。
 
-**F16**(PDF p.12)
-> the composition of units that contribute to an event-study coefficient will often change across different relative time periods
+**F11**(第 5 页)
 
-含义:论文指出在交错设定中,对事件研究系数有贡献的单位构成通常随相对时间变化。
+> …the CS event-study plot has relatively flat pre-treatment coefficients and then exhibits a kink at the time of the treatment…
 
-**F17**(PDF p.12)
-> it will often be useful to supplement aggregated event-studies with plots of the time series of the mean outcome by adoption cohort
+含义:在仿真中 CS 图处理前系数相对平坦,处理时点后出现拐点并向上倾斜(而 TWFE 图是一条连续的线性趋势)。
 
-含义:论文建议用各采纳队列(adoption cohort)的结果均值时间序列图来补充汇总的事件研究图。
+**F12**(第 7 页)
 
-**F18**(PDF p.12)
-> studies that enforce some balancing criteria
+> …However, by default, the construction is asymmetric across the pre-treatment and post-treatment periods…
 
-含义:论文还建议报告施加平衡性标准的汇总事件研究(示例:限定为处理前后至少观察3期的单位;该示例句跨 p.12-13,此处引文取 p.12 部分)。
+含义:第 3.2 节:CS 默认构造在处理前/后不对称(此处推导设定为共同处理时点)。
 
-**F19**(PDF p.2)
-> provide evidence about the validity of the research design
+**F13**(第 8 页)
 
-含义:事件研究图的第二个用途是提供关于研究设计有效性的"证据"(evidence),并非证明。
+> …we compare outcomes in consecutive periods…
 
-**F20**(PDF p.12)
-> researchers should ideally also look at the magnitudes of the pre-trends estimates and their confidence intervals
+含义:CS 处理前系数比较相邻期(短差分),处理后系数比较相对处理前一期的长差分(共同处理时点设定)。
 
-含义:脚注14(跨页,此为 p.12 部分):论文称研究者最好还应查看处理前趋势估计的量级及其置信区间。
+**F14**(第 8 页,公式,不手抄;同页锚点句:“Note that for pre-treatment coefficients…”):公式位置:共同处理时点下 CS 系数的分段定义(r<0 用相邻期差,r>=0 用相对基期差)。
 
-**F21**(PDF p.11)
-> Roth (2022) and Bilinski and Hatfield (2018) regarding pitfalls of simply looking at the significance of
+**F15**(第 8 页)
 
-含义:脚注14(p.11 部分)指向 Roth(2022) 与 Bilinski and Hatfield(2018),讨论仅看处理前系数显著性(的陷阱)。
+> …so the population version of the CS event-study coefficients show a kink at zero…
 
-**F22**(PDF p.12)
-> evaluating the magnitudes of potential bias from pre-trends is challenging if the pre-treatment and post-treatment coefficients are not constructed symmetrically
+含义:在仿真 DGP(线性违反)下,CS 系数的总体版本在零点处有拐点。
 
-含义:脚注14(p.12 部分):处理前、后系数构造不对称时,评估由处理前趋势带来的潜在偏误的量级是困难的。
+**F16**(第 9 页)
 
-**F23**(PDF p.7)
-> CS constructs event-studies by aggregating DiD comparisons of treated and not-yet-treated units
+> …a kink or jump in the plot may arise even if there is no treatment effect and parallel trends is equally violated in all periods…
 
-含义:论文说明其 CS 比较是处理组与尚未处理(not-yet-treated)单位的汇总(第3.2节描述)。
+含义:论文的实践结论:拐点或跳变可能出现在无处理效应、且各期平行趋势违反程度相同的情形中。
 
-**F24**(PDF p.12)
-> One can also conduct sensitivity analysis for these post-treatment estimates directly using the approach in Rambachan and Roth (2023)
+**F17**(第 9 页)
 
-含义:论文对 BJS 类估计量指出:可对处理后估计直接做 Rambachan-Roth 敏感性分析,交错设定下的实施见 Liu (2025)(该句语境是 BJS 等插补估计量,不是 CS)。
+> …One should therefore not apply the typical heuristics for visual inference…
 
-**F26**(PDF p.5)
-> the CS event-study plot has relatively flat
+含义:因此不应套用 TWFE 事件研究的通常目视经验(找处理时点的不连续/拐点)。
 
-含义:F4 的前半句:在上述单次仿真(非交错、无处理效应、线性趋势违反)中,默认 CS 事件研究图的处理前系数"相对平坦"(引文截止于断行连字符前,因 PDF 在 pre-/treatment 处断行,脚本会去掉连字符导致整句无法匹配)。
+**F18**(第 9 页)
 
-**F25**(PDF p.5)
-> All packages were re-installed using the latest versions as of October 31, 2025.
+> …may likewise yield misleading conclusions given the asymmetric construction of the pre- and post-treatment coefficients…
 
-含义:论文结果对应的软件版本:所有包均重新安装为截至 2025-10-31 的最新版(参考文献列 did 2.1.2)。
+含义:对这些事件研究系数比较处理前后系数的敏感性分析(如 Rambachan & Roth 2023)可能因不对称构造而得出误导结论。
+
+**F19**(第 10 页)
+
+> …always use the period before treatment as the baseline…
+
+含义:论文对 CS 的修正建议:处理前系数也用长差分(始终以处理前一期为基期);did 包用 base_period="universal"。
+
+**F20**(第 10 页)
+
+> …in the did R and csdid Stata packages using the options base_period…
+
+含义:did 包与 csdid(Stata)中实现该选项的方式(did: base_period 选项)。
+
+**F21**(第 10 页)
+
+> …the event-study estimates are numerically equivalent to the dynamic TWFE specification in the non-staggered setting considered here…
+
+含义:使用该设置后,在论文考察的非交错设定中,CS 估计与动态 TWFE 数值等价。
+
+**F22**(第 10 页)
+
+> …long-run violations of parallel trends are easier to visualize using the universal-base option…
+
+含义:脚注 9 转述 Callaway(2021)博文:长期平行趋势违反用 universal base 更易看出,但短差分可能更易发现预期效应(no anticipation)违反。
+
+**F23**(第 10 页)
+
+> …using short-differences may make it easier to detect violations of the no anticipation assumption…
+
+含义:脚注 9 续:短差分可能更易发现违反无预期假设。
+
+**F24**(第 11 页)
+
+> …regarding pitfalls of simply looking at the significance of…
+
+含义:脚注 14:Roth(2022)、Bilinski & Hatfield(2018) 讨论了仅看处理前系数显著性的陷阱。
+
+**F25**(第 12 页)
+
+> …researchers should ideally also look at the magnitudes of the pre-trends estimates and their confidence intervals…
+
+含义:脚注 14 续:研究者还应看处理前趋势估计的大小及置信区间;但若处理前后系数构造不对称,评估潜在偏误的大小很困难。
+
+**F26**(第 12 页)
+
+> …report an event-study for a method that treats the periods completely symmetrically…
+
+含义:论文建议:用对称处理各期的方法(如 did 包加上述选项)画图以目视评估平行趋势的合理性。
+
+**F27**(第 12 页)
+
+> …sensitivity analysis for these post-treatment estimates directly using the approach in Rambachan and Roth (2023)…
+
+含义:论文提到可用 Rambachan & Roth (2023) 的方法对处理后估计量直接做敏感性分析;在交错设定下与插补估计量结合的做法见 Liu (2025)。
+
+**F28**(第 12 页)
+
+> …the discussion here does not threaten the validity of the post-treatment event-study estimates for recent methods…
+
+含义:论文强调:新方法的处理后估计量在相应平行趋势假设成立时仍可解释;问题在于难以目视判断处理后系数能否由平行趋势违反解释。
+
+**F29**(第 12 页)
+
+> …the composition of units that contribute to an event-study coefficient will often change across different relative time periods…
+
+含义:交错设定下,贡献于某相对时期系数的单位构成通常随相对时期变化。
+
+**F30**(第 12 页)
+
+> …supplement aggregated event-studies with plots of the time series of the mean outcome by adoption cohort…
+
+含义:论文建议用按队列(adoption cohort)的结果均值时间序列图补充汇总事件研究图,以评估构成变化的重要性。
+
+**F31**(第 13 页)
+
+> …to units who are observed at least 3 periods before and after treatment…
+
+含义:论文建议还可报告施加平衡性条件的汇总事件研究(如仅限处理前后至少各观测 3 期的单位)。
+
+**F32**(第 5 页)
+
+> …All packages were re-installed using the latest versions as of October 31, 2025…
+
+含义:论文引用的软件版本:所有包使用截至 2025-10-31 的最新版本重装;用户的 did 版本未知。
 
 ## 4. 推断(I*)
 
-以下均为由 F* 推出、论文没有明说的内容,不含引文。
+**I1**(基于 F8, F11, F12, F13, F16, F17, F24):处理前系数贴近 0 不足以支撑“平行趋势得到验证、DID 设定有效”的写法。理由:(a) 论文说明默认 CS 图的处理前系数是相邻期短差分,处理后是长差分(F12,F13),并给出一个平行趋势明确被违反、处理无效应的仿真,其中 CS 处理前系数仍相对平坦(F8,F11);(b) 论文指出拐点/跳变可能由不对称构造产生,不应套用常规目视经验(F16,F17);(c) 论文引用的文献指出仅看处理前系数显著性有陷阱(F24)。注意:论文本身没有写“不能用‘验证’一词”或“平行趋势不可验证”,这一措辞建议是读者推断。
 
-**I1**(依据:F1, F2, F4, F26, F5, F6, F7)
+**I2**(基于 F7, F11, F13, F15):机制层面的解释(推断):默认 varying base 下,用户的处理前系数“≈0”只说明相邻两期之间处理组与对照组的差异变化很小;若存在每期很小的累积漂移 γ,处理前系数会是接近 γ 的平坦小值(可能被置信区间覆盖 0),而处理后长差分系数在论文的 DGP 中按 γ(r+1) 增长(F15)。因此 t+4、t+5 的显著性有可能部分来自累积漂移,单凭当前图无法排除。第 4 页 Figure 1(b) 的目视近似:Figure 1(b) 处理前系数多在约 0.5 附近、大多数置信区间覆盖或接近 0(目视近似,第 4 页,未经文本核验)。可能出错之处:论文是单次仿真(F7),共同处理时点,线性违反;用户的违反形态未知。
 
-处理前系数贴近 0 不能作为"平行趋势得到验证"的依据。默认 CS 的处理前系数是相邻期短差分(F5),在论文的线性违反仿真中仍呈"相对平坦"(F4、F6),而图上拐折可在平行趋势被违反时出现(F7)。因此默认图的"处理前平坦+处理后上升"形态,不能与"线性漂移(趋势违反)"区分开。可能出错处:该结论的直接证据只来自论文的一次仿真(F2)与一个线性DGP(F1),用户真实数据的违反形式(非线性、仅在某些队列)可能不同。
+**I3**(基于 F12, F19, F21):论文推导与仿真均为共同(非交错)处理时点,论文对 CS 写“by default ... asymmetric”并指出 did 包可用 universal base(F12,F19),推断该非对称性在用户的三批交错设定中同样存在,但论文没有对交错情形做推导或仿真。对用户:需要用 base_period="universal" 重新估计才能得到可与 TWFE 式目视经验对照的图(F19,F21;F21 仅在非交错设定下证明了与 TWFE 等价)。
 
-**I2**(依据:F3, F4, F26, F6)
+**I4**(基于 F29, F30, F31):用户设定的队列构成(推断):面板 2010–2024、三批 2017/2020/2022,若把进入年记作 t=0,则 t+5 只有 2017 队列能观测到(2020 队列最多到 t+4,2022 队列最多到 t+2)。因此用户图中 t+5 的系数只来自 2017 队列,t+4 只来自 2017 与 2020 两个队列,与 t=0~2(三个队列均贡献)的构成不同。论文说明构成会随相对时期变化并建议按队列画图和做平衡样本(F29,F30,F31),但没有针对本样本算过。前提:用户“进入年份”即首次处理年,且面板未因退市等缺失。
 
-用户的图(处理前4期近0、t+4/t+5显著)与论文 CS 仿真中"线性趋势违反而无处理效应"产生的形态在定性上相容(F3、F4、F6):在论文DGP中处理后系数为 gamma*(r+1),随 r 增大而变大,故晚期系数最易显著。这只说明用户的图无法排除该解释,并不说明用户数据确有趋势违反。
+**I5**(基于 F18, F26, F27):HonestDiD 一类分析的使用方式(推断):论文提示对“默认不对称构造”的处理前/后系数直接做处理前后比较的敏感性分析可能误导(F18),并建议基于对称构造的图评估(F26)、对处理后估计量做敏感性分析(F27)。故若用户补做 HonestDiD,应基于 universal base 的 CS 结果,而不是默认图的系数。论文未给出针对 CS 交错设定的具体操作步骤。
 
-**I3**(依据:F5, F6, F10, F11, F12)
-
-论文推荐的改图办法(universal 基期、处理前同样用长差分,F10-F11)会使处理前系数与处理后系数同口径地相对 t-1 比较;若存在线性漂移,处理前系数应呈现斜率而不是平坦(由F5、F6的差分构造反推)。因此建议用 base_period="universal" 重画并与默认图并列。可能出错处:论文只在非交错设定下证明与 TWFE 数值等价(F12),用户的3批交错+从未处理设定下的性质论文没有给出。
-
-**I4**(依据:F16, F17, F18)
-
-按用户设定(面板至2024年、队列为2017/2020/2022,假设为年度数据且进入年即首个处理年),相对时间 t+4 仅能由2017与2020队列贡献,t+5 仅由2017队列贡献,2022队列最多观察到 t+2;处理前4期则三批队列均可贡献。依据论文关于构成随相对时间变化的提示(F16),用户图上晚期显著的系数很可能主要由最早进入的队列驱动,与处理前系数的样本构成不同。这是由用户设定算出的推断,论文本身没有讨论用户的数据。年份推算依赖用户的数据频率与进入年定义。
-
-**I5**(依据:F9, F22, F24, F10)
-
-论文警告对默认的不对称图做"前后系数比较型"敏感性分析可能误导(F9、F22),并只明确建议在 BJS 类估计量下对处理后估计做 Rambachan-Roth 分析(F24)。因此用户若补做 HonestDiD 类分析,不应直接基于默认 CS 事件研究的处理前系数;宜先改为 universal 基期再做,并核实其对 CS 交错设定的适用实现。论文未就 CS 交错设定给出具体做法。
-
-**I6**(依据:F15, F19, F20, F21)
-
-写作措辞:论文把事件研究图定位为"证据"(F19),把处理前图用于评估平行趋势的"合理性"(F15),并提醒不能只看处理前系数显著性、应看量级与置信区间(F20、F21)。据此,"平行趋势假设得到验证、DID设定有效"属于过强表述;更稳妥的说法是"与平行趋势相容/未发现明显违反的证据,并经敏感性与构成检验"。这是对论文立场的措辞性延伸,论文本身没有给出推荐用语。
-
-**I7**(依据:F7, F14)
-
-论文区分两件事:处理后估计在平行趋势成立时仍可解释(F14),而问题在于难以判断它是否可由趋势违反解释(F7)。因此用户的 DID 结果并非被论文否定,只是"用默认图的处理前平坦来背书"这一论证不成立;结论强度是'有条件'。
+可能出错之处汇总:所有推断都来自论文的共同时点推导/单次仿真外推;I4 的队列时间计算依赖“进入年=首次处理年”和面板无缺失;I2 里图中数值为目视近似,未经文本核验。论文未直接说这些,故不是事实。
 
 ## 5. 未知与后续阅读(U*)
 
-**U1** 论文没有在含从未处理组的多队列(3批)交错设定下,实际演示或推导 universal 基期 CS 事件研究的行为(图和推导均为非交错时点)。
-- 缺什么/为何影响决策:交错+从未处理对照下,universal 基期图是否足以辨别趋势违反、与默认图差异多大,论文未给出。
-- 去哪里查:论文参考文献中的 Callaway (2021) 博客 'Universal vs. Varying Base Period in Event Studies'(p.10 脚注9、p.13 参考文献,论文自己引用)。
+**U1** 论文未对交错处理时点(用户为三批进入)推导或仿真 CS 默认图的不对称性具体如何影响处理前系数。
+- 缺什么:论文推导与仿真均为共同处理时点;未涉及三批队列、从未处理对照组、数千家对照企业的规模
+- 去哪查:Callaway and Sant'Anna (2021) (论文参考文献,第 13 页);Liu (2025) "Cohort-Anchored Robust Inference for Event-Study with Staggered Adoption"(论文参考文献,第 14 页)
 
-**U2** 论文没有给出 CS 估计量在交错设定下做 HonestDiD/Rambachan-Roth 敏感性分析的具体步骤或阈值;只在 BJS 类估计量处指向 Liu (2025)。
-- 缺什么/为何影响决策:用户应对 CS(universal 基期)的哪些系数、以何种约束(如相对违反幅度 M)做敏感性分析,论文没有覆盖。
-- 去哪里查:Rambachan and Roth (2023) 与 Liu (2025),均在论文参考文献中(p.14);具体 R 实现(例如 HonestDiD 软件包)不在本文参考文献中,属'查找建议,未确认存在于本论文参考文献'。
+**U2** 论文没有给出“处理前系数接近 0”在什么条件下足以支持平行趋势的检验功效或阈值标准。
+- 缺什么:论文只说看处理前系数大小及置信区间(F25),未量化功效或可接受的偏误大小
+- 去哪查:Roth (2022) "Pre-test with Caution"、Bilinski and Hatfield (2018)、Rambachan and Roth (2023)(均在论文参考文献,第 13–14 页)
 
-**U3** 用户未汇报各队列样本构成及各队列在各相对时间的观测数,论文无法替用户判断哪个队列驱动 t+4/t+5。
-- 缺什么/为何影响决策:每个队列(2017/2020/2022)的企业数、可观测的相对期范围、分队列事件研究系数。
-- 去哪里查:用户自己的数据;方法层面见 Liu (2025)(p.14 参考文献,论文 p.11-12 引用其队列与构成讨论)。
+**U3** 用户的 did 包版本、control_group(nevertreated/notyettreated)、anticipation 选项未知;论文第 7 页把 CS 描述为聚合“treated and not-yet-treated”比较,论文未讨论使用从未处理组作为对照时默认图是否有差异。
+- 缺什么:论文引用 did 版本 2.1.2(第 13 页);未说明各版本默认选项是否改变;用户的版本和选项缺失
+- 去哪查:Callaway (2021) 博文 "Universal vs. Varying Base Period in Event Studies"(论文参考文献,第 13 页);以及用户本机 did 包的帮助文档(查找建议,未确认内容)
 
-**U4** 论文没有量化:在约280家处理企业、数千家从未处理企业的样本规模下,处理前系数近0在统计功效上能排除多大的趋势违反。
-- 缺什么/为何影响决策:处理前系数置信区间宽度与可排除的趋势斜率大小;论文只说应看量级与置信区间(F20)。
-- 去哪里查:Roth (2022) 'Pre-test with Caution'、Bilinski and Hatfield (2018),均在论文参考文献中(p.13-14)。
+**U4** 用户数据下改用 universal base 后处理前系数是否仍接近 0、t+4/t+5 是否仍显著,论文无法回答。
+- 缺什么:需要用户用其数据重跑;论文只在 100 个单位的仿真中演示
+- 去哪查:用户自行重跑 att_gt(base_period="universal") + aggte(type="dynamic");敏感性分析参考 Rambachan and Roth (2023)
 
-**U5** 用户所用 did 包版本、对照组设定(never-treated 与 not-yet-treated)、是否含协变量、是否存在预期效应,论文没有讨论;论文的默认行为描述对应其所用软件版本(F25),用户版本可能不同。
-- 缺什么/为何影响决策:用户的 att_gt 具体参数;论文只描述了默认处理前系数为短差分(F5)但未讨论对照组选择如何改变图形。
-- 去哪里查:查找建议,未确认存在:所用 did 包版本自带的帮助文档/更新日志中关于基期默认值的说明;论文参考文献列出 did 包 (Callaway and Sant'Anna 2022, R package version 2.1.2)。
+**U5** 短差分图是否更有助于检验用户设定下的预期效应(no anticipation),论文仅转述 Callaway 的观点。
+- 缺什么:论文未独立论证;用户的政策是否可能被预期未说明
+- 去哪查:Callaway (2021) 博文(论文参考文献,第 13 页)
 
-**U6** 论文没有回答"怎样的处理前证据足以在论文里写成平行趋势成立";论文只讨论图的解读,并未提供可直接引用的措辞标准,也没有讨论平行趋势在处理后期的不可检验性。
-- 缺什么/为何影响决策:投稿/答辩层面的汇报规范。
-- 去哪里查:查找建议,未确认存在:Rambachan and Roth (2023)(在论文参考文献中)的汇报建议部分;其余需用户导师/期刊惯例。
+## 6. 下一步操作
 
-## 6. 下一步操作(按优先级)
-
-1. **改图(论文建议 F10、F11)**:用 `att_gt(..., base_period = "universal")` 重估,再用 `aggte(type = "dynamic")` 画图,与默认图并列放入论文或附录。观察处理前系数是否仍贴近 0、是否出现斜率或系统性漂移。(注:`universal` 的具体参数写法以论文 p.10 为准;用户版本的参数名需自查,见 U5。)
-2. **分队列报告(论文建议 F16、F17、F18)**:汇报 2017/2020/2022 三批队列的企业数、各队列在各相对期的观测数;画各队列结果均值的时间序列图;并给出限定"处理前后至少观察 k 期"的平衡样本事件研究。重点检查 t+4、t+5 是否仅由 2017(及 2020)队列驱动(I4,我的推断,需用你的数据核实)。
-3. **同时看量级与置信区间(论文建议 F20、F21、F22)**:不要只用"处理前系数不显著/接近0"作结论;报告处理前系数的点估计与置信区间,并说明置信区间能排除多大的趋势违反(功效见 U4)。
-4. **敏感性分析(部分来自论文 F9、F24,多数为我的建议 I5)**:在 universal 基期的事件研究基础上做 Rambachan-Roth/HonestDiD 类分析;不要直接基于默认(不对称)图的处理前系数。具体实现论文未给出(U2),需另行查找。
-5. **改写措辞(我的建议 I6、I7)**:不写"平行趋势得到验证、DID 设定有效",改为类似"处理前事件研究系数与平行趋势相容,未发现明显违反的证据(基期统一的事件研究图、分队列检查及敏感性分析均如此)",并如实说明平行趋势的处理后部分不可检验。
+1. (论文建议,F19/F20/F26)用 `att_gt(..., base_period="universal")` + `aggte(type="dynamic")` 重新估计并重画事件研究图;处理前系数以处理前一期为基准,作为评估平行趋势的图。注意 F21 的“与 TWFE 数值等价”只在论文的非交错设定下成立,你的交错设定下不能直接引用。
+2. (论文建议,F30/F31)按队列(2017/2020/2022)画结果均值时间序列图,并报告施加平衡性条件的事件研究(例如只保留处理前后至少各观测 3 期的单位)。我的补充(I4):t+5 只有 2017 队列、t+4 只有 2017+2020 队列,需要在文中说明。
+3. (论文提示,F18/F27;具体用法为我的建议 I5)补做 HonestDiD 敏感性分析,并基于 universal base 的结果做,而不是基于默认图系数;论文建议参考 Rambachan & Roth (2023) 与 Liu (2025) 对交错设定的做法(U1)。
+4. (我的建议,I1)论文表述上不要写“验证了平行趋势/DID 有效”,改成“处理前系数未显示显著偏离,与平行趋势一致;敏感性分析表明…”,并同时报告处理前系数的大小和置信区间(F24/F25),而不是只看显著性。
+5. (论文转述,F22/F23)若担心预期效应,可另外保留默认的短差分图作为补充,而不是替代;论文只转述了 Callaway 的看法(U5)。同时在文中写明 did 包版本与 control_group、anticipation 等选项(U3)。
 
 ## 7. 核验记录
 
-- 脚本:`skill/scripts/extract_pages.py`(15页,文本层可用,无无文本页,`pages_figure_like`=[4,6],已渲染 `out/work/page_4.png`、`page_6.png` 并目视)、`skill/scripts/verify_quotes.py`。
-- **最终结果:total=39,pass=39,fail=0**(fact 26 / inference 7 / unknown 6)。
-- **第1轮:total=38,pass=37,fail=1。** F4 的整句引文 NOT_FOUND:原文在 p.5 的 "pre-/treatment" 处断行,PDF 文本为 "pretreatment",而我摘录时写了带连字符的 "pre-treatment"。副作用是引文被缩短。第1轮报告保存于 `work/verify_report_round1.json`。
-- **修正1:** 将 F4 的引文截短为 "then exhibits a kink at the time of the treatment, sloping upwards afterwards."(逐字);为保留"处理前相对平坦"这一限定信息,新增 F26("the CS event-study plot has relatively flat"),I1、I2 的 based_on 同步加入 F26。第2轮(仅修正F4后)结果保存于 `work/verify_report_round2.json`(38/38);加入 F26 后重跑得最终 39/39。共迭代2次修改,未超过3轮上限,无被删除论点。
-- 图的处理:Figure 1/2 的图形内容只依据论文正文对图的文字描述(F4 等),我没有从图中读取任何数值写入结论。
-- 仍存的限制:(1) 论文证据仅为一次仿真(100 单位)+ 非交错时点下的解析推导,未做交错设定的仿真;(2) F18 的示例句("restricted to units who are observed at least 3 periods before and after treatment")跨 p.12-13,引文仅取 p.12 部分;脚注14(F20-F22)跨 p.11-12,按页分别引用;(3) F11 引文在 "base_period" 处截止,论文原文该处为 `base_period = "universal"`(含 PDF 中的下划线/引号排版),引号内容见 p.10;(4) 全文公式未手抄。
-- 人工介入:无。
+- 脚本:`verify_quotes.py` 最终结果 total=42, pass=42, fail=0(fact 32、inference 5、unknown 5)。详见 `verify_report.json`。
+- 修正:首次核验即全部通过;之后只改了 I2/I4 的措辞(I2 的“图 4”改为“第 4 页 Figure 1(b)”;I4 改为更准确的队列表述),并重跑,结果仍 42/42。
+- 局限:脚本只核验引文逐字存在,不核验概括是否忠实;F1 引文因 PDF 断行,statement 为我对摘要的概括;图中数值只作目视近似(第 4、6 页已渲染并目视检查);论文版本日期为 2026-01-21(v2),本报告未联网核查更新。
+- 本次未跑用户数据,未声称已重跑;用户 did 版本、control_group 选项未知,故结论对“默认选项”成立,选项不同时需复查(U3)。
 
 ## 8. 自检清单
 
 - [x] 结论段回答了 question 本身。
-- [x] 每条 fact 有页码+逐字引文(或公式锚点),verify_quotes 全部 PASS。
-- [x] 没有把论文设定外的结论写成 fact(交错设定、用户数据相关内容均在 I*/U*)。
-- [x] 论文限定词(单次仿真、非交错、默认设置、"if the appropriate parallel trends assumption holds")保留在 statement 中。
-- [x] 来自图的数字标了目视近似:未使用图中数值。
-- [x] 每条 unknown 有 gap 与 next_reading;后续阅读仅指向论文参考文献或标注"查找建议,未确认存在"。
-- [x] 区分了论文建议(F*)与我的建议(I*/经验)。
-- [x] 核验记录里如实写了失败、重试和未完成项。
+- [x] 每条 fact 有页码+逐字引文(F14 为公式,给页码+锚点),verify_quotes.py 全部 PASS。
+- [x] 没有把论文设定外的结论写成 fact。
+- [x] 论文限定词(非交错、仿真、默认设置)已写入 statement 或适用性表。
+- [x] 来自图的数字标了“目视近似”(I2)。
+- [x] 每条 unknown 有 gap 与 next_reading;后续阅读仅指向论文参考文献条目或明示查找建议。
+- [x] 区分了“论文建议”与“我的建议”。
+- [x] 核验记录如实写了失败与重试(本次无 FAIL)。

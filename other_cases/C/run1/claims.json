@@ -1,0 +1,11 @@
+{"question":"我用 R 的 did 默认设置画出的事件研究图，处理前系数贴近 0，能否据此写“平行趋势得到验证”？",
+ "my_setting":{"software":"R did 包(默认设置)","observation":"事件研究图处理前系数贴近 0","data_structure":"未提供","sample_size":"未提供","staggered_timing":"未提供","control_group":"未提供(never-treated / not-yet-treated 未知)"},
+ "status":"DEGRADED_NO_TEXT_LAYER: 输入 PDF 无文本层, 按 SKILL.md 第 7 节不产出任何带引文的 fact",
+ "claims":[
+  {"id":"U1","label":"unknown","statement":"论文是否说明 did 包默认设置下处理前系数贴近 0 能否支持“平行趋势得到验证”——无法判断(无可核验文本)。","gap":"输入只有第 2 页的扫描图, 无文本层, 无法产出逐字引文; 且仅有 1 页, 全文论证、仿真结果与图 1 均不在输入内。","next_reading":"请用户提供文本版(arXiv 源/HTML/带文本层 PDF)或授权 OCR 后重跑本 Skill; 在此之前不得把任何内容写成论文原文。"},
+  {"id":"U2","label":"unknown","statement":"论文所说“默认事件研究图”具体指哪些方法/软件、是否包含 R did 包——未核验。","gap":"目视可见第 2 页写到“several of the most popular recent methods”, 但具体方法列表在图 1 及后文, 不在输入页内。","next_reading":"查找建议(未确认): 在文本版全文中查图 1 及其说明、仿真设定段。"},
+  {"id":"U3","label":"unknown","statement":"用户设定缺项: 是否交错处理、对照组类型、是否使用了基期设定(base period)与默认选项、样本规模。","gap":"这些缺项可能改变答案。","next_reading":"请用户补充(最多 3 项): 处理时点是否交错; did 的 control_group 与 base_period 设置; 事件研究系数是否为 varying 基期。"}
+ ],
+ "visual_notes_unverified":[
+  {"page":1,"printed_page":"2","label":"目视、未经文本核验","note":"页面图中可见的大意: 首段谈事件研究图用于对研究设计有效性提供证据、用于“visual inference”; 第二段谈传统动态 TWFE 在交错处理与异质效应下可能难以解释、Sun and Abraham (2021) 的“contaminated”问题; 新 DiD 方法产生的事件研究图同样显示处理前系数; 作者称本文要点是几种流行新方法软件默认的事件研究图不应与传统动态 TWFE 同样解读, 并提到图 1 仿真中处理无效应但平行趋势被违反(处理组结果相对对照组呈向上线性趋势)。此为读图概述, 非逐字引文, 不得当作 fact 使用。"}
+ ]}

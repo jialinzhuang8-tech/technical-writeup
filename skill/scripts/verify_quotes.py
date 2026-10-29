@@ -12,7 +12,7 @@ claims.json 结构见 SKILL.md。本脚本检查:
   * label=unknown    : 必须有 gap(缺什么) 和 next_reading(去哪里核查; 未确认存在的材料要写成'查找建议')。
   * 所有 id 唯一; fact 的 page 不超范围。
 退出码: 0 全部通过; 1 存在失败(未通过的论点不得写进结论)。
-规范化: NFKC(展开 ﬁ/ﬀ 等连字) + 统一引号/破折号 + 去断行连字符 + 压缩空白。不做大小写或词序容错。
+规范化(v1.1): NFKC + 统一引号 + 去断行连字符 + 压缩空白; 比较时两侧同时去掉全部连字符并转小写(只对连字符放宽,不做词序容错)。
 """
 import argparse
 import difflib
@@ -29,6 +29,14 @@ def norm(s: str) -> str:
     s = re.sub(r"-\s*\n\s*", "", s)          # 行末断词连字符
     s = re.sub(r"\s+", " ", s)
     return s.strip()
+
+
+def cmp_key(s: str) -> str:
+    """比较用键(v1.1)。页面文本与引文两侧使用同一规则: 去掉所有连字符/破折号并转小写。
+    原因: PDF 常把 pre-treatment 断成 pre-/treatment, 提取后成 pretreatment; 引文若保留原连字符
+    会被误判为 NOT_FOUND。两侧同规则后, 只在连字符上放宽, 其余字符仍须逐字一致。"""
+    s = norm(s).lower()
+    return re.sub(r"[-\u2010-\u2015\u2212]", "", s)
 
 
 def near(quote_n: str, page_n: str):
@@ -52,7 +60,7 @@ def main():
 
     data = json.load(open(a.claims, encoding="utf-8"))
     pages = json.load(open(a.pages, encoding="utf-8"))
-    pn = {p["page"]: norm(p["text"]) for p in pages}
+    pn = {p["page"]: cmp_key(p["text"]) for p in pages}
     n_pages = len(pages)
     claims = data.get("claims", data) if isinstance(data, dict) else data
 
@@ -82,7 +90,7 @@ def main():
                 if not text or len(norm(text)) < 12:
                     r["problems"].append("quote(或公式的 anchor)缺失或少于12字符")
                 else:
-                    q = norm(text)
+                    q = cmp_key(text)
                     if q in pn[page]:
                         r["verified_on_page"] = page
                     else:
