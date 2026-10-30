@@ -1,3 +1,4 @@
+# Roth (2026) arXiv:2401.12309v2 (CC BY 4.0) —— 仅含本案例被引用的 PDF 页(PDF 页序),其余页省略以控制材料体量。完整论文: https://arxiv.org/abs/2401.12309v2
 
 
 =====[PDF page 1]=====
@@ -35,6 +36,8 @@ tools for implementing recent difference-in-differences methods and for making t
 1Roth (2022) identifies 70 recent papers in top economics journals displaying such plots.
 1
 arXiv:2401.12309v2  [econ.EM]  16 Jan 2026
+
+
 
 
 =====[PDF page 2]=====
@@ -77,6 +80,8 @@ on an upwards linear trend relative to the comparison group. As expected, the ev
 2
 
 
+
+
 =====[PDF page 3]=====
 plot produced using dynamic TWFE yields coefficients that lie close to a straight line. By
 contrast, the event-study plot produced by the R package for implementing the method of
@@ -117,12 +122,6 @@ HetEventStudies/tree/master.
 3
 
 
-=====[PDF page 4]=====
-Figure 1: Comparison of event-study plots in a non-staggered setting
-(a) Dynamic TWFE
-(b) CS (R package)
-(c) BJS (Stata package)
-4
 
 
 =====[PDF page 5]=====
@@ -169,24 +168,6 @@ earlier pre-trends coefficients.
 5
 
 
-=====[PDF page 6]=====
-Figure 2: Comparison of event-studies from other methods in the non-staggered setting
-(a) dCDH (Previous R implementation)
-(b) dCDH (Current R implementation)
-(c) Wooldridge (etwfe package)
-(d) SA (fixest implementation)
-In Appendix Section A, I discuss the results produced by the packages for these papers (fect
-and did2s). Both of these methods also yield an event-study that shows a jump at the date
-of treatment.
-3
-Mathematical Examination
-In this section, I show that the differences between the event-plots created by dynamic TWFE
-and CS and BJS stems from the asymmetric way that the newer estimators construct the
-pre-treatment and post-treatment coefficients.
-I consider a slightly generalized version of the set-up in the simulation section, in which
-we observe panel data for periods t “ ´¯T, ..., ¯T. Treated units denoted by Di “ 1 begin
-treatment at period 1, whereas comparison units (Di “ 0) are untreated in all periods. The
-6
 
 
 =====[PDF page 7]=====
@@ -230,6 +211,8 @@ particular, the pre-treatment coefficients are “short-differences”, i.e. com
 tive periods, whereas the post-treatment coefficients are “long-differences”, i.e. comparisons
 relative to the period before treatment.
 7
+
+
 
 
 =====[PDF page 8]=====
@@ -309,6 +292,8 @@ t“´¯T Yit be
 like to calculate, and all earlier periods are used as the omitted category. The omitted category is thus the
 earliest period if one requests ¯T pre-treatment coefficients.
 8
+
+
 
 
 =====[PDF page 9]=====
@@ -410,6 +395,8 @@ i
 9
 
 
+
+
 =====[PDF page 10]=====
 A natural follow-up question is: to what extent can the event-study plots for these
 alternative methods be modified to be more comparable to conventional event-study plots?
@@ -464,6 +451,8 @@ non-staggered setting, the post-treatment effects estimated by these approaches 
 BJS; the methods only differ in how they create the pre-treatment coefficients. Thus, the recommendations
 for modifying the pre-treatment coefficients for BJS also apply to these other methods.
 10
+
+
 
 
 =====[PDF page 11]=====
@@ -525,6 +514,8 @@ trends and no anticipation) is a separate exercise.”
 11
 
 
+
+
 =====[PDF page 12]=====
 suggest putting the BJS pre-treatment estimates on a different plot from the post-treatment
 estimates to avoid making misleading visual inferences. If one prefers to have a typical-
@@ -566,6 +557,8 @@ constructed symmetrically.
 12
 
 
+
+
 =====[PDF page 13]=====
 to units who are observed at least 3 periods before and after treatment.
 References
@@ -601,89 +594,3 @@ effects: a survey,” Econometrics Journal, 2022.
 13
 
 
-=====[PDF page 14]=====
-Freyaldenhoven, Simon, Christian Hansen, Jorge Pérez Pérez, and Jesse M.
-Shapiro, “Visualization, identification, and estimation in the linear panel event-study de-
-sign.,” Advances in Economics and Econometrics: Twelfth World Congress, 2021, Forth-
-coming.
-Gardner, John, “Two-stage differences in differences,” Working Paper, 2021.
-Li, Zikai and Anton Strezhnev, “Benchmarking parallel trends violations in regression
-imputation difference-in-differences,” July 2025.
-Liu,
-Licheng,
-Ye
-Wang,
-and
-Yiqing
-Xu,
-“A Practical Guide to Counter-
-factual
-Estimators
-for
-Causal
-Inference
-with
-Time-Series
-Cross-Sectional
-Data,”
-American
-Journal
-of
-Political
-Science,
-2024,
-68
-(1),
-160–176.
-_eprint:
-https://onlinelibrary.wiley.com/doi/pdf/10.1111/ajps.12723.
-, Ziyi Liu, Ye Wang, Yiqing Xu, Tianzhu Qin, Shiyun Hu, and Rivka Lipkovitz,
-fect: Fixed Effects Counterfactual Estimators 2025. R package version 2.0.5.
-Liu, Ziyi, “Cohort-Anchored Robust Inference for Event-Study with Staggered Adoption,”
-September 2025. arXiv:2509.01829 [econ].
-Manski, Charles F. and John V. Pepper, “How Do Right-to-Carry Laws Affect Crime
-Rates? Coping with Ambiguity Using Bounded-Variation Assumptions,” The Review of
-Economics and Statistics, 2018, 100 (2), 232–244.
-McDermott, Grant, etwfe: Extended Two-Way Fixed Effects 2025. R package version
-0.6.0.
-Rambachan, Ashesh and Jonathan Roth, “A More Credible Approach to Parallel
-Trends,” The Review of Economic Studies, October 2023, 90 (5), 2555–2591.
-Roth, Jonathan, “Pre-test with Caution: Event-study Estimates After Testing for Parallel
-Trends,” American Economic Review: Insights, 2022, 4 (3), 305–322.
-, Pedro H. C. Sant’Anna, Alyssa Bilinski, and John Poe, “What’s trending in
-difference-in-differences? A synthesis of the recent econometrics literature,” Journal of
-Econometrics, August 2023, 235 (2), 2218–2244.
-Sun, Liyang and Sarah Abraham, “Estimating dynamic treatment effects in event studies
-with heterogeneous treatment effects,” Journal of Econometrics, 2021, 225 (2), 175–199.
-Wooldridge, Jeffrey M., “Two-way fixed effects, the two-way mundlak regression, and
-difference-in-differences estimators,” Empirical Economics, August 2025.
-14
-
-
-=====[PDF page 15]=====
-A
-Event-study plots based on in-sample imputation
-Another approach to constructing event-studies for imputation estimators, which is imple-
-mented in the fect and did2s packages, reports averages of the form Yit ´ ˆYit for all relative
-time periods r, where ˆYit is the same as for BJS described above. Li and Strezhnev (2025)
-study this approach in detail, and argue that it systematically under-estimates the magni-
-tude of the pre-trends. The issue stems from the fact that the pre-treatment outcomes for
-treated units are used to form ˆYit, and thus Yit ´ ˆYit is an in-sample prediction error for
-pre-treatment observations. When applied to the non-staggered setting, the results in Li
-and Strezhnev (2025) imply that this in-sample approach yields pre-treatment coefficients
-equal to N0
-N ˆβBJS,new
-r
-for r ă 0, where N0 is the number of untreated units. Thus, the pre-
-treatment coefficients ˆβBJS,new
-r
-are multiplied by the factor N0
-N ă 1, which is very small when
-most of the units are treated. Appendix Figure 1 illustrates this attenuation by plotting the
-event-studies produced by fect and did2s in our simulated data: there is a clear jump in
-the coefficients around the treatment date.
-Appendix Figure 1: Event-studies from methods using in-sample imputation (fect and
-did2s)
-(a) fect
-(b) did2s
-15

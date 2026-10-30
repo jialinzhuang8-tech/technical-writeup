@@ -1,6 +1,0 @@
-{"question":"用 R 的 did 默认设置画出的事件研究图处理前系数贴近 0，能否据此写“平行趋势得到验证”？请给出带页码和原文引用的依据。",
- "my_setting":{"software":"R did 包，默认设置","data_structure":"未提供","sample_size":"未提供","pretreatment_coefficients":"贴近 0"},
- "claims":[
-  {"id":"U1","label":"unknown","statement":"输入 PDF 无文本层，无法产出经脚本核验的逐字引文；因此本次无任何 fact。","gap":"缺少可复制文本的论文页面（文本版 PDF / arXiv 源 / HTML），或用户授权 OCR","next_reading":"查找建议，未确认：请提供该论文的 arXiv 源或 HTML 文本版，或授权 OCR 后重跑本 Skill"},
-  {"id":"U2","label":"unknown","statement":"输入仅为论文的 1 页（PDF 页序 1，页面底部打印页码目视为 2），其中是否讨论 R did 默认设置下处理前系数的解读，本页可见部分未明确点名 did 包；其余页（含 Figure 1 及仿真细节）未提供。","gap":"缺 Figure 1、仿真细节及后文内容","next_reading":"查找建议，未确认：该论文全文（含 Figure 1 及仿真设定部分）"}
- ]}

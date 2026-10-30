@@ -4,7 +4,7 @@
 > 本文用一篇真实论文、6 次独立运行、盲评打分，回答"让 AI 怎么读才靠谱"，并如实记录哪些有效、哪些没效，以及一个 v1.0 到 v1.1 的真实修复。
 
 - 论文：J. Roth, *Interpreting Event-Studies from Recent Difference-in-Differences Methods*, arXiv:2401.12309v2（2026-01-16，CC BY 4.0）
-- 正文入口：本文件。方法实现在 `skill/`，证据在 `case_roth_event_study/`，复用与异常案例在 `other_cases/`，早期版本在 `archive_v1.0/`。
+- 正文入口：本文件。方法实现在 `skill/`，证据在 `case_roth_event_study/`，异常案例在 `other_cases/C/`。
 - 工具：Python + PyMuPDF；AI 宿主为 WorkBuddy 桌面 Agent（**模型型号与成本无法取得**，宿主未暴露）。
 - 本文只覆盖通用技术分享，**未使用玻尔科学空间**，不涉及其生态贡献项。
 
@@ -57,7 +57,7 @@
 
 ## 4. 对照实验：Skill 到底有没有用（如实）
 
-同一任务、同一 PDF、同一宿主默认模型；每次独立新会话、只能访问自己的目录；验收标准**运行前冻结**（`A_acceptance.md`，30 分）；6 份报告去标识并随机编码后，由另开的评分员打分，并被要求自己在论文文本中核对引文与页码。with 侧为 **v1.1.0**（`skill/` 目录哈希 `1d5b753ff54c`，6 次 with 运行已逐个核对一致）。
+同一任务、同一 PDF、同一宿主默认模型；每次独立新会话、只能访问自己的目录；验收标准**运行前冻结**（`A_acceptance.md`，30 分）；6 份报告去标识并随机编码后，由另开的评分员打分，并被要求自己在论文文本中核对引文与页码（编码对应关系未放入本包，评分摘要见 `case_roth_event_study/grading/A_v11_grades.md`）。with 侧为 **v1.1.0**（`skill/` 目录哈希 `1d5b753ff54c`；3 次 A-with、B、2 次 C 运行均已逐个核对一致）。
 
 | 运行 | 总分/30 | 核心结论 R/12 | 证据 Q/8 | 适用性 G/6 | 可用性 U/4 | 硬性扣分 | 耗时 |
 | --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |
@@ -78,11 +78,11 @@
 3. **没有稳定的总分优势**：without-1 拿了 29，与 with 持平。三对样本不能说显著。
 4. **代价**：with 约为 without 的 **1.5–5 倍耗时，典型 2–3 倍**。
 5. 引文：with 三份台账 fact 引文 23 / 32 / 23 条，脚本核验全部通过；评分员对报告正文英文引文的人工核对为 with-1 23/23、with-2 36/36、with-3 23/23；without-1 14/14、without-2 20/22、without-3 8/8。
-6. v1.0（早期版本，archive）的方向相同：28.3 vs 25.7。
+6. v1.0（早期版本）的方向相同：with 均值 28.3 vs without 25.7；v1.0 的原始记录因体量限制未放入本包。
 
 ### 复用与异常（同一 v1.1，未改 Skill）
-- **B（换论文、换方法族）**：Alvarez & Ferman (2023)，纯理论推断笔记，无仿真无实证。19/20；评分员抽查 10 处引文、9 处页码全部正确；正确指出"论文无仿真/实证"和"命题 2 的条件成立才有效"。扣分点：后续阅读文献没有明说"我未读过"。B 只跑了一次，无 without 对照。见 `other_cases/B/`。
-- **C（构造的扫描件）**：把 A 的第 2 页渲染成无文本层 PDF。两次独立运行均 10/10：诊断 `text_layer_ok=false`，不产出任何引文，结论"无法判断"，给出恢复路径；评分员把目视笔记逐句对照该页真实文字，两次的 11 条与 10 条断言均有对应，没有凭记忆补写。见 `other_cases/C/`。
+- **B（换论文、换方法族）**：Alvarez & Ferman (2023)，纯理论推断笔记，无仿真无实证。19/20；评分员抽查 10 处引文、9 处页码全部正确；正确指出"论文无仿真/实证"和"命题 2 的条件成立才有效"。扣分点：后续阅读文献没有明说"我未读过"。B 只跑一次，无 without 对照。**为控制材料体量，B 的报告与台账未放入本包，只保留这段结果摘要，因此 B 的结论本包内无法逐条核对。**
+- **C（构造的扫描件）**：把 A 的第 2 页渲染成无文本层 PDF。两次独立运行均 10/10：诊断 `text_layer_ok=false`，不产出任何引文，结论"无法判断"，给出恢复路径；评分员把目视笔记逐句对照该页真实文字，两次的 11 条与 10 条断言均有对应，没有凭记忆补写。见 `other_cases/C/`（含两次运行的报告）。
 
 ## 5. 值得分享的发现：一个"校验器自己出错"的坑
 
@@ -105,7 +105,8 @@
 pip install pymupdf
 PY=python3
 mkdir -p r/input r/out
-cp case_roth_event_study/input/roth_2401.12309v2.pdf r/input/
+# 到 https://arxiv.org/abs/2401.12309v2 下载 PDF(v2)，放到 r/input/roth_2401.12309v2.pdf
+# （本包只带被引用页的文本: case_roth_event_study/input/roth_2401.12309v2.cited_pages.txt）
 cp case_roth_event_study/A_task.md r/task.md
 sed -i.bak 's#materials/A/#input/#' r/task.md       # 任务里的路径指向 input/
 cp -R skill r/skill                                  # without 对照不要这一行
@@ -123,10 +124,10 @@ $PY skill/scripts/verify_quotes.py out/claims.json out/work/pages.json --out out
 ```
 
 **怎么判断跑通**：①`verify_quotes.py` 退出码 0 且 `fail=0`；②`out/` 下有 `report.md`、`claims.json`、`verify_report.json`；③报告含 SKILL.md 第 6 节规定的 7 个部分。
-**怎么评价结果**：对照 `case_roth_event_study/A_acceptance.md` 逐项打分；在 `case_roth_event_study/input/roth_2401.12309v2.pages.txt` 里搜引文核对页码。最好让没看过运行过程的人盲评。
+**怎么评价结果**：对照 `case_roth_event_study/A_acceptance.md` 逐项打分；在 `case_roth_event_study/input/roth_2401.12309v2.cited_pages.txt` 里搜引文核对页码（只含被引用的 11 页，其余页需自行下载 PDF）。最好让没看过运行过程的人盲评。
 **校验 Skill 版本**：`cd skill && find . -type f ! -name '*.pyc' | LC_ALL=C sort | xargs shasum -a 256 | shasum -a 256 | cut -c1-12`，应得到 `1d5b753ff54c`。
 
-干净目录复跑：一个只拿到 README 的全新会话按旧 README 复跑，跑通到 verify 33/33 全 PASS，但暴露 12 条 README 缺口和 7 处写错（`case_roth_event_study/grading/clean_dir_repro_log.md`）。本节命令是据此重写的；**重写后没有再让另一个会话复跑**，所以"已无缺口"尚未被证实。
+干净目录复跑：一个只拿到 README 的全新会话按旧 README 复跑，跑通到 verify 33/33 全 PASS，但暴露 12 条 README 缺口和 7 处写错（该日志因体量限制未放入本包）。本节命令是据此重写的；**重写后没有再让另一个会话复跑**，所以"已无缺口"尚未被证实。
 
 ## 7. 来源、授权与我的贡献
 - **已有成果**：论文（CC BY 4.0，arXiv）；PyMuPDF（AGPL，仅作运行依赖，不随仓库分发）。
@@ -140,7 +141,9 @@ $PY skill/scripts/verify_quotes.py out/claims.json out/work/pages.json --out out
 ```
 README.md  LICENSE
 skill/                       Skill 本体 v1.1.0 (SKILL.md + scripts/extract_pages.py, verify_quotes.py)
-case_roth_event_study/       案例 A：任务、冻结验收标准、input/、runs/(6 次原始报告与日志)、grading/(评分、盲评密钥)
-other_cases/B, C/            复用案例与扫描件异常案例的任务、验收标准、报告与台账
-archive_v1.0/                v1.0 的早期运行与评分，不计入上面的结果
+case_roth_event_study/       案例 A：任务、冻结验收标准、input/(被引用页文本)、
+                             runs/(with-1..3 的报告与 with-1 台账; without-1..3 的报告)、grading/(A 的评分摘要、C 的评分)
+other_cases/C/               扫描件异常案例：任务、验收标准、两次运行的报告
 ```
+**为满足材料体量上限，本包不含**：论文 PDF 与未被引用的页、with-2/3 的台账与核验 JSON、B 案例的报告、v1.0 归档、干净目录复跑日志、盲评密钥。对应结论的摘要保留在上文，但这些部分在本包内无法逐条核对。
+**为满足材料体量上限，本包不含**：论文 PDF 与未被引用的页、with-2/3 的台账与核验 JSON、B 案例的报告、v1.0 归档、干净目录复跑日志、盲评密钥。对应结论的摘要保留在上文，但这些部分在本包内无法逐条核对。

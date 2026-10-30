@@ -1,8 +1,0 @@
-{"question":"用 R 的 did 默认设置画出的事件研究图处理前系数贴近 0，能否据此写“平行趋势得到验证”？",
- "my_setting":{"software":"R 包 did（默认设置，用户自述）","data_structure":"未提供","sample_size":"未提供","input_available":"仅论文第2页的无文本层扫描图 PDF"},
- "extraction_status":"text_layer_ok=false；本次不产出任何 fact（无逐字引文+页码）",
- "claims":[
-  {"id":"U1","label":"unknown","statement":"论文是否明确说明：默认设置下的事件研究图处理前系数接近 0，是否可作为平行趋势成立的证据","gap":"无文本层，无法产出可由脚本核验的引文；且仅有第 2 页，未含论文其余部分（仿真细节、对 did 的具体讨论）","next_reading":"请提供文本版（arXiv 源/出版社 HTML）或授权 OCR 后重跑本 Skill，通读全文"},
-  {"id":"U2","label":"unknown","statement":"论文所用仿真设定（非交错处理、处理组相对对照组存在线性上升趋势）与用户数据的对应程度","gap":"用户未提供数据结构、样本量、是否交错处理、对照组类型、是否用 did 默认的 base_period/anticipation/控制组设定","next_reading":"请用户补充上述信息；论文全文（OCR/文本版）中的仿真细节部分"},
-  {"id":"U3","label":"unknown","statement":"页面中提及的参考文献（目视所见）与本问题的相关性","gap":"未经文本核验，不能当作已确认的参考文献条目","next_reading":"查找建议，未确认存在：待取得全文后，从参考文献列表核对"}
- ]}
